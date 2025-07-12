@@ -9,12 +9,6 @@ variable "location" {
   default     = "West Europe"
 }
 
-variable "subscription_id" {
-  type        = string
-  description = "The Azure subscription ID to use."
-  sensitive   = true
-}
-
 variable "node_count" {
   description = "The number of worker nodes for the AKS cluster."
   type        = number
