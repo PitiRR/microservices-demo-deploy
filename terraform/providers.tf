@@ -6,8 +6,15 @@ terraform {
     }
   }
 }
+# Prevent backend from storing secrets
+ephemeral "azure_subscription" "subscription_id"{
+  value = azure_subscription.subscription_id.value
+}
+locals { 
+  subscription_id = jsondecode(ephemeral.azure_subscription.subscription_id.value).value
+}
 
 provider "azurerm" {
   features {}
-  subscription_id = var.subscription_id
+  subscription_id = local.subscription_id
 }
