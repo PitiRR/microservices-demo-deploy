@@ -1,15 +1,7 @@
-# Resource group for all resources
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
 module "core_infra" {
   source = "./modules/core-infra"
 
-  resource_group_name = rg.name
-  location            = rg.location
-
-  depends_on = [ azurerm_resource_group.rg ]
+  resource_group_name = var.infra_rg_name
+  location            = var.infra_rg_location
 }
   

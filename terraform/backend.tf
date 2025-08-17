@@ -1,8 +1,9 @@
+# Assuming values from README.md
 terraform {
   backend "azurerm" {
-    resource_group_name  = var.resource_group_name
-    storage_account_name = var.backend_storage_account_name
+    resource_group_name  = "rg-tfstate"
+    storage_account_name = "tfstatemicroservicesdemo"
     container_name       = "tfstate"
-    key                  = "prod.terraform.tfstate"
+    key                  = "terraform.tfstate"
   }
 }

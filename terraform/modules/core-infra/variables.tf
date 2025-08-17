@@ -7,7 +7,7 @@ variable "node_count" {
 variable "resource_group_name" {
   type        = string
   description = "The name of the resource group."
-  default     = "BoutiqueShopProd"
+  default     = "boutiqueshopprod"
 }
 variable "location" {
   type        = string
