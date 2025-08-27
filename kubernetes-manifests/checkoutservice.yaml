@@ -1,0 +1,3 @@
+﻿containers:
+  - name: server
+    image: acrBoutiqueShopProd.azurecr.io/checkoutservice:__VERSION__

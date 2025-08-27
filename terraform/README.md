@@ -59,7 +59,7 @@ echo $ARM_ACCESS_KEY
     cd microservices-demo-deploy/terraform
     ```
 
-1. Configure the backend: Head to `backend.tf` and replace the parameters with your values. For example, using  
+1. Configure the backend: Head to `backend.tf` and replace the parameters with your values. For example, using:
 
 ```hcl
 terraform {
@@ -72,7 +72,7 @@ terraform {
 }
 ```
 
-1. Initialize Terraform.
+1. Initialize Terraform:
 
     ```bash
     terraform init
@@ -80,17 +80,21 @@ terraform {
 
 (If prompted, type `yes` to copy existing state to the new backend)
 
-1. Always verify the resources that will be created.
+1. Always verify the resources that will be created:
 
     ```bash
     terraform plan
     ```
 
-1. If you are satisfied with proposed changes, you may apply the configuration - it may take up to 15 minutes.
+1. If you are satisfied with proposed changes, you may apply the configuration - it may take up to 15 minutes:
 
     ```bash
     terraform apply
     ```
+
+## Setup: Update Github Secrets to push future changes to ACR
+
+To ensure future changes done to `microservices-demo` are applied to reality, we must build the Dockerfile and push it somewhere accessible to the Kubernetes Cluster. This place is `Azure Container Registry (ACR)`. Follow instructions below to configure Github Actions to push the changes.
 
 ## Accessing the Application
 
@@ -112,12 +116,18 @@ Look for the value in the `EXTERNAL-IP` column. Paste this IP address into your 
 
 ## Clean up
 
-To avoid incurring charges to your account for the resources used in this sample application, you can destroy the infrastructure.
+To avoid incurring charges to your account for the resources used in this sample application, you can destroy the infrastructure at any point.
 
 To remove the individual resources created for by Terraform without deleting the project:
 
 1. Run the following command to destroy all resources:
 
+  ```bash
+  terraform destroy
+  ```
+
+**Note**: remote backend is separated from Terraform resources by design. To delete the tfstate resource group:
+
 ```bash
-terraform destroy
+az group delete --name $RESOURCE_GROUP_NAME --yes --no-wait
 ```

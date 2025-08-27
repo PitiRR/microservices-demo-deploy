@@ -1,0 +1,49 @@
+﻿name: Build, Push, and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Deploy Repo
+        uses: actions/checkout@v3
+
+      - name: Read Version Tag
+        id: version
+        run: echo "TAG=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Checkout Application Repo at Version
+        uses: actions/checkout@v3
+        with:
+          repository: PitiRR/microservices-demo
+          ref: ${{ steps.version.outputs.TAG }}
+          path: microservices-demo
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: ACR Login, Build, and Push Image
+        run: |
+          az acr login --name ${{ vars.ACR_NAME }}
+          docker build -t ${{ vars.ACR_NAME }}.azurecr.io/checkoutservice:${{ steps.version.outputs.TAG }} ./microservices-demo/src/checkoutservice
+          docker push ${{ vars.ACR_NAME }}.azurecr.io/checkoutservice:${{ steps.version.outputs.TAG }}
+
+      - name: Terraform Apply
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
+      - name: Update Kubernetes Manifests with new Image Tag
+        run: |
+          sed -i "s|__VERSION__|${{ steps.version.outputs.TAG }}|g" kubernetes-manifests/checkoutservice.yaml
+
+      - name: Get AKS Credentials and Deploy to Kubernetes
+        run: |
+          az aks get-credentials --resource-group ${{ vars.RESOURCE_GROUP_NAME }} --name ${{ vars.AKS_CLUSTER_NAME }} --overwrite-existing
+          kubectl apply -f kubernetes-manifests/
