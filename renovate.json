@@ -1,32 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Renovate configuration to update the images.tag in values.yaml when a new release is made in PitiRR/microservices-demo.",
-  "extends": ["github>whitesource/renovate-config:recommended"],
-  "packageRules": [
+  "extends": [
+    "config:base"
+  ],
+  "regexManagers": [
     {
-      "matchDatasources": ["github-releases"],
-      "matchPackageNames": ["PitiRR/microservices-demo"],
-      "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?.*$",
-      "extractVersion": "(?<version>.*)",
-      "groupName": "microservices-demo release",
-      "separateMajorMinor": false,
-      "separateMultipleMajor": false,
-      "automerge": false,
-      "labels": ["dependencies", "helm"],
-      "commitMessageTopic": "Update images.tag to {{newValue}}",
-      "regexManagers": [
-        {
-          "description": "Update images.tag in values.yaml",
-          "fileMatch": ["helm-chart/values.yaml"],
-          "matchRegex": "images:\\s*repository:\\s*.*?\\s*tag:\\s*\"(?<currentValue>.*?)\"",
-          "datasourceTemplate": "github-releases",
-          "depNameTemplate": "PitiRR/microservices-demo",
-          "versioningTemplate": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?.*$",
-          "extractVersionTemplate": "(?<version>.*)",
-          "currentValueTemplate": "{{currentValue}}",
-          "newValueTemplate": "{{version}}"
-        }
-      ]
+      "fileMatch": ["^helm-chart/values.yaml$"],
+      "matchStrings": [
+        "# This is the value Renovate will update.\\s*tag: \"(?<currentValue>.*?)\""
+      ],
+      "depNameTemplate": "PitiRR/microservices-demo",
+      "datasourceTemplate": "github-releases"
     }
   ]
 }
