@@ -3,14 +3,13 @@
   "extends": [
     "config:base"
   ],
+  "platform": "github",
   "regexManagers": [
     {
       "fileMatch": ["^helm-chart/values.yaml$"],
       "matchStrings": [
-        "# This is the value Renovate will update.\\s*tag: \"(?<currentValue>.*?)\""
-      ],
-      "depNameTemplate": "PitiRR/microservices-demo",
-      "datasourceTemplate": "github-releases"
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?) versioning=(?<versioning>.*?)\\s*\\ntag:\\s*\"(?<currentValue>.*?)\""
+      ]
     }
   ]
 }

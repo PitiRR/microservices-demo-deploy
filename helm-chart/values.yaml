@@ -4,6 +4,7 @@
 
 images:
   repository: acrboutiqueshopprod.azurecr.io
+  # renovate: datasource=github-releases depName=PitiRR/microservices-demo versioning=semver
   tag: "v0.10.1"
 
 serviceAccounts:
