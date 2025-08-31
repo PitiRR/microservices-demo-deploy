@@ -1,12 +1,37 @@
 ﻿version: 2
 updates:
+  # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-    registries:
-      - type: git
-        url: https://github.com
-        repo: PitiRR/microservices-demo
-        patterns:
-          - "v*"
+    labels:
+      - "dependencies"
+      - "github_actions"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # Maintain dependencies for Kubernetes manifests
+  - package-ecosystem: "docker"
+    directory: "/kubernetes-manifests"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "kubernetes"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # Maintain dependencies for the Helm chart
+  - package-ecosystem: "docker"
+    directory: "/helm-chart"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "helm"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
