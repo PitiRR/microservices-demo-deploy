@@ -12,18 +12,6 @@ updates:
       prefix: "chore(deps)"
       include: "scope"
 
-  # Maintain dependencies for Kubernetes manifests
-  - package-ecosystem: "docker"
-    directory: "/kubernetes-manifests"
-    schedule:
-      interval: "daily"
-    labels:
-      - "dependencies"
-      - "kubernetes"
-    commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
-
   # Maintain dependencies for the Helm chart
   - package-ecosystem: "docker"
     directory: "/helm-chart"
